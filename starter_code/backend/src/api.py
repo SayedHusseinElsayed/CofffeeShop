@@ -192,7 +192,7 @@ def unprocessable(error):
                     }), 404
 '''
 @app.errorhandler(404)
-def unprocessable(error):
+def resourcenotfound(error):
     return jsonify({
                     "success": False, 
                     "error": 404,
@@ -204,7 +204,7 @@ def unprocessable(error):
     error handler should conform to general task above 
 '''
 @app.errorhandler(400)
-def unprocessable(error):
+def permissionnotincluded(error):
     return jsonify({
                     "success": False, 
                     "error": 400,
@@ -212,11 +212,29 @@ def unprocessable(error):
                     }), 400
 
 
+
+'''
+@TODO implement error handler for 401
+'''
+@app.errorhandler(401)
+def Unauthorized(error):
+    return jsonify({
+                    "success": False, 
+                    "error": 401,
+                    "message": "Unauthorized"
+                    }), 401
+
+
+
 '''
 @TODO implement error handler for AuthError
     error handler should conform to general task above 
 '''
-
+@app.errorhandler(AuthError)
+def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000,debug=True)
